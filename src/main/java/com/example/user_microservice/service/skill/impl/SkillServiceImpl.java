@@ -22,6 +22,7 @@ public class SkillServiceImpl implements SkillService {
     @Override
     @Transactional
     public Skill create(SkillDto dto) {
-        return skillRepository.save(skillMapper.toEntity(dto));
+        Skill skill = skillMapper.toEntity(dto);
+        return skillRepository.save(skill);
     }
 }

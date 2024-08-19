@@ -31,6 +31,6 @@ public class SkillManagerImpl implements SkillManager {
     @Override
     @Transactional
     public List<SkillDto> getUserSkills(Long userId) {
-
+        return null;
     }
 }
