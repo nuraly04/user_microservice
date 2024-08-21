@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SkillDto {
 
+    private Long id;
+
     @NotBlank
     private String title;
 }
