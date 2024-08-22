@@ -33,10 +33,10 @@ public class SkillManagerImplTest {
         skill.setId(1L);
         skill.setName("Java developer");
 
-        Mockito.when(skillService.create(dto)).thenReturn(skill);
+        Mockito.when(skillService.create(skill)).thenReturn(skill);
 
         skillManager.create(dto);
-        Mockito.verify(skillService, Mockito.times(1)).create(dto);
+        Mockito.verify(skillService, Mockito.times(1)).create(skill);
         Mockito.verify(skillMapper, Mockito.times(1)).toDto(skill);
     }
 }

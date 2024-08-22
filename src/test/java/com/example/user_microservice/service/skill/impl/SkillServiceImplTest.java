@@ -33,7 +33,7 @@ public class SkillServiceImplTest {
         skill.setId(1L);
         skill.setName("title");
         Mockito.when(skillMapper.toEntity(dto)).thenReturn(skill);
-        skillService.create(dto);
+        skillService.create(skill);
         Mockito.verify(skillRepository, Mockito.times(1)).save(skill);
     }
 }
