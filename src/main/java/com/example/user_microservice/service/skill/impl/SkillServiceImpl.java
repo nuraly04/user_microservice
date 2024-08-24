@@ -1,7 +1,6 @@
 package com.example.user_microservice.service.skill.impl;
 
 import com.example.user_microservice.exception.DataNotFoundException;
-import com.example.user_microservice.mapper.skill.SkillMapper;
 import com.example.user_microservice.model.skill.Skill;
 import com.example.user_microservice.repository.skill.SkillRepository;
 import com.example.user_microservice.service.skill.SkillService;

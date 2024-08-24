@@ -15,4 +15,12 @@ public interface SkillOfferRepository extends JpaRepository<SkillOffer, Long> {
         AND r.receiver_id = :userId
         """)
     Long countBySkillIdAndByUserId(Long skillId, Long userId);
+
+    @Query(nativeQuery = true, value = """
+        SELECT FROM offer_skill os
+        JOIN recommendation r on os.recommendation_id = r.id
+        WHERE skill_id = :skillId
+        AND r.receiver_id = :userId
+        """)
+    SkillOffer findBySkillIdAndUserId(Long skillId, Long userId);
 }

@@ -5,8 +5,12 @@ import com.example.user_microservice.dto.skill.SkillDto;
 import com.example.user_microservice.manager.skill.SkillManager;
 import com.example.user_microservice.mapper.skill.SkillMapper;
 import com.example.user_microservice.model.skill.Skill;
+import com.example.user_microservice.model.skill.SkillOffer;
+import com.example.user_microservice.model.user.User;
 import com.example.user_microservice.service.skill.SkillOfferService;
 import com.example.user_microservice.service.skill.SkillService;
+import com.example.user_microservice.service.user.UserService;
+import com.example.user_microservice.service.user.UserSkillGuaranteeService;
 import com.example.user_microservice.validation.skill.SkillValidation;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +27,8 @@ import java.util.stream.Collectors;
 public class SkillManagerImpl implements SkillManager {
 
     SkillService skillService;
+    UserService userService;
+    UserSkillGuaranteeService userSkillGuaranteeService;
     SkillValidation skillValidation;
     SkillOfferService skillOfferService;
     SkillMapper skillMapper;
@@ -58,6 +64,10 @@ public class SkillManagerImpl implements SkillManager {
         Skill skill = skillService.get(skillId);
         skillValidation.validationSkill(skillId, userId);
         skillValidation.validationCountOfferedSkill(skillId, userId);
-        return new SkillDto();
+        SkillOffer skillOffer = skillOfferService.findBySkillIdAndUserId(skillId, userId);
+        User user = userService.get(userId);
+        User guarantor = userService.get(skillOffer.getRecommendation().getAuthor().getId());
+        userSkillGuaranteeService.create(user, guarantor, skill);
+        return skillMapper.toDto(skill);
     }
 }

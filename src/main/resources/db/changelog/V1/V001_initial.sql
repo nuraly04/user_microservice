@@ -58,10 +58,10 @@ CREATE TABLE IF NOT EXISTS user_skill_guarantee
 (
     id BIGSERIAL PRIMARY KEY,
     skill_id BIGINT NOT NULL,
-    guarantee_id BIGINT NOT NULL,
+    guarantor_id BIGINT NOT NULL,
 
     CONSTRAINT fk_skill_id FOREIGN KEY (skill_id) REFERENCES skill (id),
-    CONSTRAINT fk_guarantee_id FOREIGN KEY (guarantee_id) REFERENCES users (id)
+    CONSTRAINT fk_guarantee_id FOREIGN KEY (guarantor_id) REFERENCES users (id)
 );
 
 CREATE TABLE IF NOT EXISTS offer_skill

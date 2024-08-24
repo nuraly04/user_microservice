@@ -13,5 +13,5 @@ public interface SkillManager {
 
     List<SkillCandidateDto> getUserSkillsOffered(Long userId);
 
-    SkillDto acquireSkillFRomOffers(Long skillId, Long userId);
+    SkillDto acquireSkillFromOffers(Long skillId, Long userId);
 }
