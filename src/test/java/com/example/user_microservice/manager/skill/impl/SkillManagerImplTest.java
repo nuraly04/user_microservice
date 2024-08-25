@@ -1,5 +1,6 @@
 package com.example.user_microservice.manager.skill.impl;
 
+import com.example.user_microservice.dto.skill.SkillCandidateDto;
 import com.example.user_microservice.dto.skill.SkillDto;
 import com.example.user_microservice.mapper.skill.SkillMapper;
 import com.example.user_microservice.model.recommendation.Recommendation;
@@ -50,9 +51,10 @@ public class SkillManagerImplTest {
 
     private SkillDto skillDto;
     private Skill skill;
+    private Long longAmount;
 
     @BeforeEach
-    private void SetUp() {
+    public void SetUp() {
         skillDto = SkillDto.builder()
                 .id(1L)
                 .title("Java Developer")
@@ -60,6 +62,7 @@ public class SkillManagerImplTest {
         skill = new Skill();
         skill.setId(1L);
         skill.setName("Java developer");
+        longAmount = 3L;
     }
 
     @Test
@@ -68,6 +71,7 @@ public class SkillManagerImplTest {
                 .title("Java developer")
                 .build();
 
+        when(skillMapper.toEntity(dto)).thenReturn(skill);
         when(skillService.create(skill)).thenReturn(skill);
 
         skillManager.create(dto);
@@ -101,19 +105,22 @@ public class SkillManagerImplTest {
         Long userId = 1L;
 
         List<Skill> skills = initList();
-        List<SkillDto> dtos = initListDto();
+        List<SkillCandidateDto> dtos = candidateDtos();
 
         when(skillService.getUserSkillsOffered(userId)).thenReturn(skills);
-        when(skillMapper.toDto(skills.get(0))).thenReturn(dtos.get(0));
-        when(skillMapper.toDto(skills.get(1))).thenReturn(dtos.get(1));
-        when(skillMapper.toDto(skills.get(2))).thenReturn(dtos.get(2));
+        when(skillOfferService.countOfferedBySkillAndUser(skills.get(0).getId(), userId)).thenReturn(longAmount);
+        when(skillOfferService.countOfferedBySkillAndUser(skills.get(1).getId(), userId)).thenReturn(longAmount);
+        when(skillOfferService.countOfferedBySkillAndUser(skills.get(2).getId(), userId)).thenReturn(longAmount);
+        when(skillMapper.toCandidateDto(skills.get(0), longAmount)).thenReturn(dtos.get(0));
+        when(skillMapper.toCandidateDto(skills.get(1), longAmount)).thenReturn(dtos.get(1));
+        when(skillMapper.toCandidateDto(skills.get(2), longAmount)).thenReturn(dtos.get(2));
 
         skillManager.getUserSkillsOffered(userId);
 
         verify(skillService, Mockito.times(1)).getUserSkillsOffered(userId);
-        verify(skillMapper, Mockito.times(1)).toDto(skills.get(0));
-        verify(skillMapper, Mockito.times(1)).toDto(skills.get(1));
-        verify(skillMapper, Mockito.times(1)).toDto(skills.get(2));
+        verify(skillMapper, Mockito.times(1)).toCandidateDto(skills.get(0), longAmount);
+        verify(skillMapper, Mockito.times(1)).toCandidateDto(skills.get(1), longAmount);
+        verify(skillMapper, Mockito.times(1)).toCandidateDto(skills.get(2), longAmount);
     }
 
     @Test
@@ -156,6 +163,14 @@ public class SkillManagerImplTest {
                 new SkillDto(1L, "Java"),
                 new SkillDto(2L, "JS"),
                 new SkillDto(4L, "IOS")
+        );
+    }
+
+    private List<SkillCandidateDto> candidateDtos() {
+        return List.of(
+                new SkillCandidateDto(new SkillDto(1L, "Java"), 3L),
+                new SkillCandidateDto(new SkillDto(2L, "JS"), 3L),
+                new SkillCandidateDto(new SkillDto(4L, "IOS"), 3L)
         );
     }
 

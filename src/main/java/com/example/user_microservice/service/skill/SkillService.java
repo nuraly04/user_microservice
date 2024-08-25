@@ -15,4 +15,6 @@ public interface SkillService {
     List<Skill> getUserSkillsOffered(Long userId);
 
     Skill findBySkillIdAndByUserId(Long skillId, Long userId);
+
+    List<Skill> findBySkillIds(List<Long> skillIds);
 }

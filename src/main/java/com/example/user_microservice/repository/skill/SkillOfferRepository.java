@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface SkillOfferRepository extends JpaRepository<SkillOffer, Long> {
 
@@ -23,4 +25,6 @@ public interface SkillOfferRepository extends JpaRepository<SkillOffer, Long> {
         AND r.receiver_id = :userId
         """)
     SkillOffer findBySkillIdAndUserId(Long skillId, Long userId);
+
+    List<SkillOffer> findAllByIdIn(List<Long> skillOfferIds);
 }

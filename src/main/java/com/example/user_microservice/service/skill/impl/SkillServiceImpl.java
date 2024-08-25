@@ -27,8 +27,15 @@ public class SkillServiceImpl implements SkillService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Skill findBySkillIdAndByUserId(Long skillId, Long userId) {
         return skillRepository.findBySkillIdAndByUserId(skillId, userId);
+    }
+
+    @Override
+    @Transactional
+    public List<Skill> findBySkillIds(List<Long> skillIds) {
+        return skillRepository.findSkillsByIdIn(skillIds);
     }
 
     @Override

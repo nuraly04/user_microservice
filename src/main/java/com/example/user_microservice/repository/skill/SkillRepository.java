@@ -32,4 +32,6 @@ public interface SkillRepository extends JpaRepository<Skill, Long> {
             AND user_id = :userId
             """)
     Skill findBySkillIdAndByUserId(Long skillId, Long userId);
+
+    List<Skill> findSkillsByIdIn(List<Long> skillIds);
 }

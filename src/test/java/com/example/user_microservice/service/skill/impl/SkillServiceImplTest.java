@@ -3,6 +3,7 @@ package com.example.user_microservice.service.skill.impl;
 import com.example.user_microservice.exception.DataNotFoundException;
 import com.example.user_microservice.model.skill.Skill;
 import com.example.user_microservice.repository.skill.SkillRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -13,8 +14,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;f
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class SkillServiceImplTest {
@@ -25,33 +27,40 @@ public class SkillServiceImplTest {
     @Mock
     private SkillRepository skillRepository;
 
+    private Long skillId;
+    private Long userId;
+    private Skill skill;
+
+    @BeforeEach
+    public void setUp() {
+        skillId = 1L;
+        userId = 1L;
+        skill = new Skill();
+        skill.setId(1L);
+    }
+
     @Test
     public void createTest() {
 
-        Skill skill = new Skill();
-        skill.setName("title");
         skillService.create(skill);
+
         verify(skillRepository, Mockito.times(1)).save(skill);
     }
 
     @Test
     public void getUserSkillsTest() {
 
-        Long userId = 1L;
-
         List<Skill> skills = getSkills();
 
         when(skillRepository.findAllByUserId(userId)).thenReturn(skills);
 
-        skillService.getUserSkillsOffered(userId);
+        skillService.getUserSkills(userId);
 
         verify(skillRepository, Mockito.times(1)).findAllByUserId(userId);
     }
 
     @Test
     public void getUserSkillsOfferedTest() {
-
-        Long userId = 1L;
 
         List<Skill> skills = getSkills();
 
@@ -64,10 +73,6 @@ public class SkillServiceImplTest {
 
     @Test
     public void getPositiveTest() {
-        Long skillId = 1L;
-
-        Skill skill = new Skill();
-        skill.setId(1L);
 
         when(skillRepository.findById(skillId)).thenReturn(Optional.of(skill));
 
@@ -79,9 +84,17 @@ public class SkillServiceImplTest {
     @Test
     public void getNegativeTest() {
 
-        Long skillId = 1L;
+        assertThrows(DataNotFoundException.class, () -> skillService.get(skillId));
+    }
 
-        when(skillRepository.findById(skillId)).thenThrow(() -> DataNotFoundException.class);
+    @Test
+    public void findBySkillIdAndByUserIdTest() {
+
+        when(skillService.findBySkillIdAndByUserId(skillId, userId)).thenReturn(skill);
+
+        skillService.findBySkillIdAndByUserId(skillId, userId);
+
+        verify(skillRepository, Mockito.times(1)).findBySkillIdAndByUserId(skillId, userId);
     }
 
     private List<Skill> getSkills() {

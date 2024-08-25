@@ -1,5 +1,6 @@
 package com.example.user_microservice.validation.skill;
 
+import com.example.user_microservice.model.skill.Skill;
 import com.example.user_microservice.service.skill.SkillOfferService;
 import com.example.user_microservice.service.skill.SkillService;
 import lombok.AccessLevel;
@@ -20,7 +21,8 @@ public class SkillValidation {
     private static final int MAX_COUNT_OFFERED_SKILL = 3;
 
     public void validationSkill(Long skillId, Long userId) {
-        if (Objects.nonNull(skillService.findBySkillIdAndByUserId(skillId, userId))) {
+        Skill skill = skillService.findBySkillIdAndByUserId(skillId, userId);
+        if (Objects.nonNull(skill)) {
             throw new IllegalArgumentException(String.format("Скилл под id:%s уже имеет пользователь под id:%s", skillId, userId));
         }
     }

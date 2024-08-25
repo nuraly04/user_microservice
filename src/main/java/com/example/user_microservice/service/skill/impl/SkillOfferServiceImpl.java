@@ -10,6 +10,8 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -17,6 +19,11 @@ public class SkillOfferServiceImpl implements SkillOfferService {
 
     SkillOfferRepository skillOfferRepository;
 
+    @Override
+    @Transactional
+    public SkillOffer create(SkillOffer skillOffer) {
+        return skillOfferRepository.save(skillOffer);
+    }
 
     @Override
     @Transactional(readOnly = true)
@@ -36,5 +43,11 @@ public class SkillOfferServiceImpl implements SkillOfferService {
     @Transactional(readOnly = true)
     public Long countOfferedBySkillAndUser(Long skillId, Long userId) {
         return skillOfferRepository.countBySkillIdAndByUserId(skillId, userId);
+    }
+
+    @Override
+    @Transactional
+    public List<SkillOffer> findBySkillOfferIds(List<Long> skillOfferIds) {
+        return skillOfferRepository.findAllByIdIn(skillOfferIds);
     }
 }
