@@ -4,7 +4,11 @@ import com.example.user_microservice.model.skill.Skill;
 import com.example.user_microservice.model.user.User;
 import com.example.user_microservice.model.user.UserSkillGuarantee;
 
+import java.util.List;
+
 public interface UserSkillGuaranteeService {
 
-    UserSkillGuarantee create(User user, User guarantor, Skill skill);
+    UserSkillGuarantee create(UserSkillGuarantee skillGuarantee);
+    void delete(UserSkillGuarantee skillGuarantee);
+    List<UserSkillGuarantee> findBySkillsAndGuarantorAndUser(User user, User guarantor, List<Skill> skills);
 }

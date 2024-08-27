@@ -10,7 +10,8 @@ import org.mapstruct.ReportingPolicy;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface SkillOfferMapper {
 
+    @Mapping(target = "id", ignore = true)
     @Mapping(source = "skill", target = "skill")
     @Mapping(source = "recommendation", target = "recommendation")
-    SkillOffer toEntity(Skill skill, Recommendation recommendation);
+    SkillOffer toCreate(Skill skill, Recommendation recommendation);
 }

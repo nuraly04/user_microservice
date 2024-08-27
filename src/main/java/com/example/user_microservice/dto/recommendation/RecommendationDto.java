@@ -30,4 +30,5 @@ public class RecommendationDto {
 
     private List<SkillOfferDto> skillOffers;
     LocalDateTime createdAt;
+    LocalDateTime updatedAt;
 }

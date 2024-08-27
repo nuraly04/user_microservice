@@ -3,10 +3,12 @@ package com.example.user_microservice.manager.skill.impl;
 import com.example.user_microservice.dto.skill.SkillCandidateDto;
 import com.example.user_microservice.dto.skill.SkillDto;
 import com.example.user_microservice.mapper.skill.SkillMapper;
+import com.example.user_microservice.mapper.user.UserSkillGuaranteeMapper;
 import com.example.user_microservice.model.recommendation.Recommendation;
 import com.example.user_microservice.model.skill.Skill;
 import com.example.user_microservice.model.skill.SkillOffer;
 import com.example.user_microservice.model.user.User;
+import com.example.user_microservice.model.user.UserSkillGuarantee;
 import com.example.user_microservice.service.skill.SkillOfferService;
 import com.example.user_microservice.service.skill.SkillService;
 import com.example.user_microservice.service.user.UserService;
@@ -39,6 +41,9 @@ public class SkillManagerImplTest {
 
     @Mock
     private UserSkillGuaranteeService userSkillGuaranteeService;
+
+    @Mock
+    private UserSkillGuaranteeMapper guaranteeMapper;
 
     @Mock
     private SkillValidation skillValidation;
@@ -135,6 +140,8 @@ public class SkillManagerImplTest {
         User guarantor = new User();
         user.setId(2L);
 
+        UserSkillGuarantee guarantee = new UserSkillGuarantee();
+
         Recommendation recommendation = new Recommendation();
         recommendation.setAuthor(guarantor);
 
@@ -147,10 +154,11 @@ public class SkillManagerImplTest {
         when(userService.get(userId)).thenReturn(user);
         when(userService.get(skillOffer.getRecommendation().getAuthor().getId())).thenReturn(guarantor);
         when(skillMapper.toDto(skill)).thenReturn(skillDto);
+        when(guaranteeMapper.create(user, guarantor, skill)).thenReturn(guarantee);
 
         skillManager.acquireSkillFromOffers(skillId, userId);
 
-        verify(userSkillGuaranteeService, Mockito.times(1)).create(user, guarantor, skill);
+        verify(userSkillGuaranteeService, Mockito.times(1)).create(guarantee);
         verify(skillValidation, Mockito.times(1)).validationSkill(skillId, userId);
         verify(skillValidation, Mockito.times(1)).validationCountOfferedSkill(skillId, userId);
         verify(skillOfferService, Mockito.times(1)).findBySkillIdAndUserId(skillId, userId);

@@ -1,21 +1,30 @@
 package com.example.user_microservice.validation.recommendation;
 
-import com.example.user_microservice.model.skill.Skill;
-import com.example.user_microservice.service.skill.SkillService;
+import com.example.user_microservice.exception.DataValidationException;
+import com.example.user_microservice.model.recommendation.Recommendation;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class RecommendationValidation {
 
-    SkillService skillService;
+    private final static Long MIN_MONTHS = 6L;
 
-    public void validateSkills(List<Long> skillIds, Long receiverId) {
+    public void validateAvailableGiveRecommendation(Recommendation recommendation) {
+        if (Objects.nonNull(recommendation)) {
+            LocalDateTime createdAt = recommendation.getCreatedAt();
+            LocalDateTime available = LocalDateTime.now().minusMonths(MIN_MONTHS);
+
+            if (createdAt.isAfter(available)) {
+                throw new DataValidationException(String.format("Пользователь:%s уже дал рекомендацию этому пользователю:%s за последние 6 месяцев", recommendation.getAuthor(), recommendation.getReceiver()));
+            }
+        }
     }
 }

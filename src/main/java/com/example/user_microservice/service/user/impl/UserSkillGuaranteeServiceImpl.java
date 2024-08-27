@@ -11,6 +11,8 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -21,15 +23,23 @@ public class UserSkillGuaranteeServiceImpl implements UserSkillGuaranteeService 
 
     @Override
     @Transactional
-    public UserSkillGuarantee create(
+    public UserSkillGuarantee create(UserSkillGuarantee skillGuarantee) {
+        return skillGuaranteeRepository.save(skillGuarantee);
+    }
+
+    @Override
+    @Transactional
+    public void delete(UserSkillGuarantee skillGuarantee) {
+        skillGuaranteeRepository.delete(skillGuarantee);
+    }
+
+    @Override
+    @Transactional
+    public List<UserSkillGuarantee> findBySkillsAndGuarantorAndUser(
             User user,
             User guarantor,
-            Skill skill
+            List<Skill> skills
     ) {
-        UserSkillGuarantee skillGuarantee = new UserSkillGuarantee();
-        skillGuarantee.setUser(user);
-        skillGuarantee.setGuarantor(guarantor);
-        skillGuarantee.setSkill(skill);
-        return skillGuaranteeRepository.save(skillGuarantee);
+        return skillGuaranteeRepository.findAllByUserAndGuarantorAndSkillIn(user, guarantor, skills);
     }
 }

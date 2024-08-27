@@ -1,5 +1,6 @@
 package com.example.user_microservice.repository.skill;
 
+import com.example.user_microservice.model.recommendation.Recommendation;
 import com.example.user_microservice.model.skill.SkillOffer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -27,4 +28,6 @@ public interface SkillOfferRepository extends JpaRepository<SkillOffer, Long> {
     SkillOffer findBySkillIdAndUserId(Long skillId, Long userId);
 
     List<SkillOffer> findAllByIdIn(List<Long> skillOfferIds);
+
+    List<SkillOffer> findByRecommendation(Recommendation recommendation);
 }

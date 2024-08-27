@@ -1,6 +1,7 @@
 package com.example.user_microservice.service.skill.impl;
 
 import com.example.user_microservice.exception.DataNotFoundException;
+import com.example.user_microservice.model.recommendation.Recommendation;
 import com.example.user_microservice.model.skill.Skill;
 import com.example.user_microservice.model.skill.SkillOffer;
 import com.example.user_microservice.repository.skill.SkillOfferRepository;
@@ -62,6 +63,14 @@ public class SkillOfferServiceImplTest {
     }
 
     @Test
+    public void deleteTest() {
+
+        skillOfferService.delete(skillOffer);
+
+        verify(skillOfferRepository, Mockito.times(1)).delete(skillOffer);
+    }
+
+    @Test
     public void findBySkillIdAndUserIdTest() {
 
         when(skillOfferRepository.findBySkillIdAndUserId(skillId, userId)).thenReturn(skillOffer);
@@ -79,5 +88,14 @@ public class SkillOfferServiceImplTest {
         skillOfferService.countOfferedBySkillAndUser(skillId, userId);
 
         verify(skillOfferRepository, Mockito.times(1)).countBySkillIdAndByUserId(skillId, userId);
+    }
+
+    @Test
+    public void findByRecommendationTest() {
+        Recommendation recommendation = new Recommendation();
+
+        skillOfferService.findByRecommendation(recommendation);
+
+        verify(skillOfferRepository, Mockito.times(1)).findByRecommendation(recommendation);
     }
 }

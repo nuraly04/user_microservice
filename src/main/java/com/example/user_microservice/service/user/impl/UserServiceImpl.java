@@ -10,6 +10,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -29,5 +30,23 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     public User get(Long userId) {
         return userRepository.findById(userId).orElseThrow(() -> new DataNotFoundException(User.class, userId, "id"));
+    }
+
+    @Override
+    @Transactional
+    public void delete(User mentee, User mentor) {
+        mentor.getMentees().remove(mentee);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<User> findMenteesByMentorId(Long mentorId) {
+        return userRepository.findMenteesByMentorId(mentorId);
+    }
+
+    @Override
+    @Transactional
+    public List<User> findMentorsByMenteeId(Long menteeId) {
+        return userRepository.findMentorsByMenteeId(menteeId);
     }
 }

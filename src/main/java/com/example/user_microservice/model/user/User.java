@@ -6,9 +6,9 @@ import com.example.user_microservice.model.skill.Skill;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import lombok.Getter;
@@ -38,6 +38,15 @@ public class User extends BaseEntity {
 
     @ManyToMany(mappedBy = "users")
     private List<Skill> skills;
+
+    @ManyToMany(mappedBy = "mentors")
+    private List<User> mentees;
+
+    @ManyToMany
+    @JoinTable(name = "m2m_mentorship",
+    joinColumns = @JoinColumn(name = "mentee_id"),
+    inverseJoinColumns = @JoinColumn(name = "mentor_id"))
+    private List<User> mentors;
 
     @Email
     @Column(name = "email", unique = true, nullable = false, length = 128)

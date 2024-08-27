@@ -5,10 +5,12 @@ import com.example.user_microservice.dto.skill.SkillOfferDto;
 import com.example.user_microservice.manager.recommendation.RecommendationManager;
 import com.example.user_microservice.mapper.recommendation.RecommendationMapper;
 import com.example.user_microservice.mapper.skill.SkillOfferMapper;
+import com.example.user_microservice.mapper.user.UserSkillGuaranteeMapper;
 import com.example.user_microservice.model.recommendation.Recommendation;
 import com.example.user_microservice.model.skill.Skill;
 import com.example.user_microservice.model.skill.SkillOffer;
 import com.example.user_microservice.model.user.User;
+import com.example.user_microservice.model.user.UserSkillGuarantee;
 import com.example.user_microservice.service.recommendation.RecommendationService;
 import com.example.user_microservice.service.skill.SkillOfferService;
 import com.example.user_microservice.service.skill.SkillService;
@@ -22,7 +24,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +34,7 @@ public class RecommendationManagerImpl implements RecommendationManager {
     SkillService skillService;
     SkillOfferMapper skillOfferMapper;
     SkillOfferService skillOfferService;
+    UserSkillGuaranteeMapper guaranteeMapper;
     RecommendationMapper recommendationMapper;
     UserSkillGuaranteeService guaranteeService;
     RecommendationService recommendationService;
@@ -43,9 +45,65 @@ public class RecommendationManagerImpl implements RecommendationManager {
     public void giveRecommendation(RecommendationDto recommendationDto) {
         User author = userService.get(recommendationDto.getAuthorId());
         User receiver = userService.get(recommendationDto.getReceiverId());
-        recommendationValidation.validate;
-        List<Skill> skills = skillService.findBySkillIds(recommendationDto.getSkillOffers().stream().map(SkillOfferDto::getSkillId).collect(Collectors.toList()));
+        recommendationValidation.validateAvailableGiveRecommendation(recommendationService.findByAuthorAndReceiver(author, receiver));
+        List<Long> skillIdsToRecommendation = recommendationDto.getSkillOffers().stream()
+                .map(SkillOfferDto::getSkillId)
+                .toList();
+        List<Skill> skills = skillService.findBySkillIds(skillIdsToRecommendation);
+        List<UserSkillGuarantee> userSkills = guaranteeService.findBySkillsAndGuarantorAndUser(receiver, author, skills);
+        List<Skill> skillsToGuarantee = skills.stream()
+                .filter(skill -> userSkills.stream()
+                        .noneMatch(userSkill -> userSkill.getSkill().equals(skill)))
+                .toList();
         Recommendation recommendation = recommendationService.create(recommendationMapper.toEntity(recommendationDto, author, receiver));
-        skills.forEach(skill -> skillOfferService.create(skillOfferMapper.toEntity(skill, recommendation)));
+        skills.forEach(skill -> skillOfferService.create(skillOfferMapper.toCreate(skill, recommendation)));
+        skillsToGuarantee.forEach(skill -> guaranteeService.create(guaranteeMapper.create(receiver, author, skill)));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public RecommendationDto getRecommendation(Long recommendationId) {
+        return recommendationMapper.toDto(recommendationService.get(recommendationId));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<RecommendationDto> getRecommendations(Long receiverId) {
+        User receiver = userService.get(receiverId);
+        List<Recommendation> recommendations = recommendationService.findByReceiver(receiver);
+        return recommendations.stream()
+                .map(recommendationMapper::toDto)
+                .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<RecommendationDto> getAllGivenRecommendation(Long authorId) {
+        User author = userService.get(authorId);
+        List<Recommendation> recommendations = recommendationService.findByAuthor(author);
+        return recommendations.stream()
+                .map(recommendationMapper::toDto)
+                .toList();
+    }
+
+    @Override
+    @Transactional
+    public void updateRecommendation(Long recommendationId, RecommendationDto recommendationDto) {
+        Recommendation recommendation = recommendationService.get(recommendationId);
+        recommendationService.update(recommendation, recommendationDto);
+    }
+
+    @Override
+    @Transactional
+    public void deleteRecommendation(Long recommendationId) {
+        Recommendation recommendation = recommendationService.get(recommendationId);
+        List<SkillOffer> skillOffers = skillOfferService.findByRecommendation(recommendation);
+        List<Skill> skills = skillOffers.stream()
+                .map(SkillOffer::getSkill)
+                .toList();
+        skillOffers.forEach(skillOfferService::delete);
+        List<UserSkillGuarantee> skillGuarantees = guaranteeService.findBySkillsAndGuarantorAndUser(recommendation.getReceiver(), recommendation.getAuthor(), skills);
+        skillGuarantees.forEach(guaranteeService::delete);
+        recommendationService.delete(recommendation);
     }
 }

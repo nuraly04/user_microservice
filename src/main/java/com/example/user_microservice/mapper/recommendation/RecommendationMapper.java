@@ -10,6 +10,9 @@ import org.mapstruct.ReportingPolicy;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface RecommendationMapper {
 
+    @Mapping(source = "recommendationDto.id", target = "id")
+    @Mapping(source = "recommendationDto.createdAt", target = "createdAt")
+    @Mapping(source = "recommendationDto.updatedAt", target = "updatedAt")
     @Mapping(source = "author", target = "author")
     @Mapping(source = "receiver", target = "receiver")
     Recommendation toEntity(RecommendationDto recommendationDto, User author, User receiver);

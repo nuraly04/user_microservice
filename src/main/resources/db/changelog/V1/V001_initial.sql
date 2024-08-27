@@ -85,3 +85,13 @@ CREATE TABLE IF NOT EXISTS m2m_user_skill
     CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users (id),
     CONSTRAINT fk_skill_id FOREIGN KEY (skill_id) REFERENCES skill (id)
 );
+
+CREATE TABLE IF NOT EXISTS m2m_mentorship
+(
+    id BIGSERIAL PRIMARY KEY,
+    mentee_id BIGINT NOT NULL,
+    mentor_id BIGINT NOT NULL,
+
+    CONSTRAINT fk_mentee_id FOREIGN KEY (mentee_id) REFERENCES users (id),
+    CONSTRAINT fk_mentor_id FOREIGN KEY (mentor_id) REFERENCES users (id)
+);

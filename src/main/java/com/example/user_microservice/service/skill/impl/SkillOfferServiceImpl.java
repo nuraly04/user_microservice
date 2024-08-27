@@ -1,6 +1,7 @@
 package com.example.user_microservice.service.skill.impl;
 
 import com.example.user_microservice.exception.DataNotFoundException;
+import com.example.user_microservice.model.recommendation.Recommendation;
 import com.example.user_microservice.model.skill.SkillOffer;
 import com.example.user_microservice.repository.skill.SkillOfferRepository;
 import com.example.user_microservice.service.skill.SkillOfferService;
@@ -34,6 +35,12 @@ public class SkillOfferServiceImpl implements SkillOfferService {
     }
 
     @Override
+    @Transactional
+    public void delete(SkillOffer skillOffer) {
+        skillOfferRepository.delete(skillOffer);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public SkillOffer findBySkillIdAndUserId(Long skillId, Long userId) {
         return skillOfferRepository.findBySkillIdAndUserId(skillId, userId);
@@ -49,5 +56,11 @@ public class SkillOfferServiceImpl implements SkillOfferService {
     @Transactional
     public List<SkillOffer> findBySkillOfferIds(List<Long> skillOfferIds) {
         return skillOfferRepository.findAllByIdIn(skillOfferIds);
+    }
+
+    @Override
+    @Transactional
+    public List<SkillOffer> findByRecommendation(Recommendation recommendation) {
+        return skillOfferRepository.findByRecommendation(recommendation);
     }
 }
