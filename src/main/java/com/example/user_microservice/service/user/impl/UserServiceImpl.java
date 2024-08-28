@@ -34,14 +34,26 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void delete(User mentee, User mentor) {
-        mentor.getMentees().remove(mentee);
+    public User save(User user) {
+        return userRepository.save(user);
+    }
+
+    @Override
+    @Transactional
+    public void deleteMentorshipUsers(List<User> users, User user) {
+        user.getMentees().removeAll(users);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<User> findMenteesByMentorId(Long mentorId) {
         return userRepository.findMenteesByMentorId(mentorId);
+    }
+
+    @Override
+    @Transactional
+    public List<User> findUsersByIds(List<Long> usersIds) {
+        return userRepository.findAllById(usersIds);
     }
 
     @Override

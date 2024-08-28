@@ -19,16 +19,17 @@ CREATE TABLE IF NOT EXISTS ref_common_reference
 
 CREATE TABLE IF NOT EXISTS users
 (
-    id         BIGSERIAL PRIMARY KEY,
-    name       VARCHAR(64)  NOT NULL,
-    surname    VARCHAR(64)  NOT NULL,
-    patronymic VARCHAR(64),
-    city       BIGINT,
-    email      VARCHAR(128) NOT NULL UNIQUE,
-    phone      VARCHAR(64) UNIQUE,
-    active     BOOLEAN      NOT NULL DEFAULT true,
-    created_at TIMESTAMP             DEFAULT now(),
-    updated_at TIMESTAMP             DEFAULT now(),
+    id            BIGSERIAL PRIMARY KEY,
+    name          VARCHAR(64)  NOT NULL,
+    surname       VARCHAR(64)  NOT NULL,
+    patronymic    VARCHAR(64),
+    date_of_birth DATE         NOT NULL,
+    city          BIGINT,
+    email         VARCHAR(128) NOT NULL UNIQUE,
+    phone         VARCHAR(64) UNIQUE,
+    active        BOOLEAN      NOT NULL DEFAULT true,
+    created_at    TIMESTAMP             DEFAULT now(),
+    updated_at    TIMESTAMP             DEFAULT now(),
 
     CONSTRAINT fk_city FOREIGN KEY (city) REFERENCES ref_common_reference (id)
 );
@@ -56,8 +57,8 @@ CREATE TABLE IF NOT EXISTS recommendation
 
 CREATE TABLE IF NOT EXISTS user_skill_guarantee
 (
-    id BIGSERIAL PRIMARY KEY,
-    skill_id BIGINT NOT NULL,
+    id           BIGSERIAL PRIMARY KEY,
+    skill_id     BIGINT NOT NULL,
     guarantor_id BIGINT NOT NULL,
 
     CONSTRAINT fk_skill_id FOREIGN KEY (skill_id) REFERENCES skill (id),
@@ -76,6 +77,18 @@ CREATE TABLE IF NOT EXISTS offer_skill
     CONSTRAINT fk_recommendation_id FOREIGN KEY (recommendation_id) REFERENCES recommendation (id)
 );
 
+CREATE TABLE IF NOT EXISTS mentorship_request
+(
+    id        BIGSERIAL PRIMARY KEY,
+    mentee_id BIGINT       NOT NULL,
+    mentor_id BIGINT       NOT NULL,
+    status    VARCHAR(128) NOT NULL,
+    content   TEXT         NOT NULL,
+
+    CONSTRAINT fk_mentee_id FOREIGN KEY (mentee_id) REFERENCES users (id),
+    CONSTRAINT fk_mentor_id FOREIGN KEY (mentor_id) REFERENCES users (id)
+);
+
 CREATE TABLE IF NOT EXISTS m2m_user_skill
 (
     id       BIGSERIAL PRIMARY KEY,
@@ -88,10 +101,20 @@ CREATE TABLE IF NOT EXISTS m2m_user_skill
 
 CREATE TABLE IF NOT EXISTS m2m_mentorship
 (
-    id BIGSERIAL PRIMARY KEY,
+    id        BIGSERIAL PRIMARY KEY,
     mentee_id BIGINT NOT NULL,
     mentor_id BIGINT NOT NULL,
 
     CONSTRAINT fk_mentee_id FOREIGN KEY (mentee_id) REFERENCES users (id),
     CONSTRAINT fk_mentor_id FOREIGN KEY (mentor_id) REFERENCES users (id)
+);
+
+CREATE TABLE IF NOT EXISTS m2m_subscription
+(
+    id BIGSERIAL PRIMARY KEY,
+    follower_id BIGINT NOT NULL,
+    author_id BIGINT NOT NULL,
+
+    CONSTRAINT fk_follower_id FOREIGN KEY (follower_id) REFERENCES users (id),
+    CONSTRAINT fk_author_id FOREIGN KEY (author_id) REFERENCES users (id)
 );

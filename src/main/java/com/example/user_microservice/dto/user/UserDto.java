@@ -1,12 +1,10 @@
-package com.example.user_microservice.dto.mentorship;
+package com.example.user_microservice.dto.user;
 
-import com.example.user_microservice.dto.skill.SkillDto;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Data
 @Builder
@@ -15,8 +13,11 @@ import java.util.List;
 public class UserDto {
 
     private Long id;
+
+    @NotBlank
     private String name;
+
+    @NotBlank
     private String surname;
     private String patronymic;
-    private List<SkillDto> skills;
 }

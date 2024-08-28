@@ -11,9 +11,13 @@ public interface UserService {
 
     User get(Long userId);
 
-    void delete(User mentee, User mentor);
+    User save(User user);
+
+    void deleteMentorshipUsers(List<User> mentees, User mentor);
 
     List<User> findMenteesByMentorId(Long mentorId);
+
+    List<User> findUsersByIds(List<Long> userIds);
 
     List<User> findMentorsByMenteeId(Long menteeId);
 }

@@ -3,6 +3,7 @@ package com.example.user_microservice.model.user;
 import com.example.user_microservice.model.base.BaseEntity;
 import com.example.user_microservice.model.reference.RefCommonReference;
 import com.example.user_microservice.model.skill.Skill;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -14,6 +15,7 @@ import jakarta.validation.constraints.Email;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -39,7 +41,7 @@ public class User extends BaseEntity {
     @ManyToMany(mappedBy = "users")
     private List<Skill> skills;
 
-    @ManyToMany(mappedBy = "mentors")
+    @ManyToMany(mappedBy = "mentors", cascade = CascadeType.ALL)
     private List<User> mentees;
 
     @ManyToMany
@@ -48,6 +50,15 @@ public class User extends BaseEntity {
     inverseJoinColumns = @JoinColumn(name = "mentor_id"))
     private List<User> mentors;
 
+    @ManyToMany(mappedBy = "followers")
+    private List<User> authors;
+
+    @ManyToMany
+    @JoinTable(name = "m2m_subscription",
+    joinColumns = @JoinColumn(name = "author_id"),
+    inverseJoinColumns = @JoinColumn(name = "follower_id"))
+    private List<User> followers;
+
     @Email
     @Column(name = "email", unique = true, nullable = false, length = 128)
     private String email;
@@ -55,6 +66,12 @@ public class User extends BaseEntity {
     @Column(name = "phone", unique = true, nullable = false, length = 64)
     private String phone;
 
+    @Column(name = "date_of_birth")
+    private LocalDate dateOfBirth;
+
+    @Column(name = "created_at")
     private LocalDateTime createAt;
+
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 }
