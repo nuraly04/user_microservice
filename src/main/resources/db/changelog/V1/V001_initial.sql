@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS users
     name          VARCHAR(64)  NOT NULL,
     surname       VARCHAR(64)  NOT NULL,
     patronymic    VARCHAR(64),
+    about         TEXT,
     date_of_birth DATE         NOT NULL,
     city          BIGINT,
     email         VARCHAR(128) NOT NULL UNIQUE,
@@ -89,6 +90,33 @@ CREATE TABLE IF NOT EXISTS mentorship_request
     CONSTRAINT fk_mentor_id FOREIGN KEY (mentor_id) REFERENCES users (id)
 );
 
+CREATE TABLE IF NOT EXISTS contact
+(
+    id      BIGSERIAL PRIMARY KEY,
+    user_id BIGINT       NOT NULL,
+    contact VARCHAR(255) NOT NULL,
+    type    VARCHAR(128) NOT NULL,
+
+    CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users (id)
+);
+
+CREATE TABLE IF NOT EXISTS event
+(
+    id            BIGSERIAL PRIMARY KEY,
+    created_at    TIMESTAMP DEFAULT now(),
+    updated_at    TIMESTAMP,
+    start_date    TIMESTAMP NOT NULL,
+    end_date      TIMESTAMP NOT NULL,
+    content       TEXT         NOT NULL,
+    owner_id      BIGINT       NOT NULL,
+    city_id       BIGINT       NOT NULL,
+    location      VARCHAR(255) NOT NULL,
+    max_attendees BIGINT,
+
+    CONSTRAINT fk_owner_id FOREIGN KEY (owner_id) REFERENCES users (id),
+    CONSTRAINT fk_city_id FOREIGN KEY (city_id) REFERENCES ref_common_reference (id)
+);
+
 CREATE TABLE IF NOT EXISTS m2m_user_skill
 (
     id       BIGSERIAL PRIMARY KEY,
@@ -111,9 +139,9 @@ CREATE TABLE IF NOT EXISTS m2m_mentorship
 
 CREATE TABLE IF NOT EXISTS m2m_subscription
 (
-    id BIGSERIAL PRIMARY KEY,
+    id          BIGSERIAL PRIMARY KEY,
     follower_id BIGINT NOT NULL,
-    author_id BIGINT NOT NULL,
+    author_id   BIGINT NOT NULL,
 
     CONSTRAINT fk_follower_id FOREIGN KEY (follower_id) REFERENCES users (id),
     CONSTRAINT fk_author_id FOREIGN KEY (author_id) REFERENCES users (id)

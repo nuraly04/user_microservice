@@ -1,6 +1,7 @@
 package com.example.user_microservice.model.user;
 
 import com.example.user_microservice.model.base.BaseEntity;
+import com.example.user_microservice.model.contact.Contact;
 import com.example.user_microservice.model.reference.RefCommonReference;
 import com.example.user_microservice.model.skill.Skill;
 import jakarta.persistence.CascadeType;
@@ -10,6 +11,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import lombok.Getter;
@@ -33,6 +35,8 @@ public class User extends BaseEntity {
 
     @Column(name = "patronymic", nullable = false, length = 64)
     private String patronymic;
+
+    private String about;
 
     @ManyToOne
     @JoinColumn(name = "city")
@@ -58,6 +62,9 @@ public class User extends BaseEntity {
     joinColumns = @JoinColumn(name = "author_id"),
     inverseJoinColumns = @JoinColumn(name = "follower_id"))
     private List<User> followers;
+
+    @OneToMany(mappedBy = "user")
+    private List<Contact> contacts;
 
     @Email
     @Column(name = "email", unique = true, nullable = false, length = 128)

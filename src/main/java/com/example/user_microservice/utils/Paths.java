@@ -8,4 +8,5 @@ public class Paths {
     public static final String SKILL = API_V1 + "/skills";
     public static final String RECOMMENDATION = API_V1 + "/recommendations";
     public static final String MENTORSHIP = API_V1 + "/mentorship";
+    public static final String SUBSCRIPTION = API_V1 + "/subscription";
 }
