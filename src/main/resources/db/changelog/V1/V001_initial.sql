@@ -104,10 +104,11 @@ CREATE TABLE IF NOT EXISTS event
 (
     id            BIGSERIAL PRIMARY KEY,
     created_at    TIMESTAMP DEFAULT now(),
-    updated_at    TIMESTAMP,
+    updated_at    TIMESTAMP DEFAULT now(),
     start_date    TIMESTAMP NOT NULL,
     end_date      TIMESTAMP NOT NULL,
     content       TEXT         NOT NULL,
+    title         VARCHAR(128) NOT NULL,
     owner_id      BIGINT       NOT NULL,
     city_id       BIGINT       NOT NULL,
     location      VARCHAR(255) NOT NULL,
@@ -115,6 +116,13 @@ CREATE TABLE IF NOT EXISTS event
 
     CONSTRAINT fk_owner_id FOREIGN KEY (owner_id) REFERENCES users (id),
     CONSTRAINT fk_city_id FOREIGN KEY (city_id) REFERENCES ref_common_reference (id)
+);
+
+CREATE TABLE IF NOT EXISTS event_skill
+(
+    id BIGSERIAL PRIMARY KEY,
+    skill_id BIGINT NOT NULL,
+    event_id BIGINT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS m2m_user_skill
