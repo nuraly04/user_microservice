@@ -14,4 +14,6 @@ public interface EventMapper {
 
     @Mapping(target = "skills", ignore = true)
     EventDto toDto(Event event);
+
+    Event toEntity(Event event);
 }

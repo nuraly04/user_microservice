@@ -10,4 +10,5 @@ public class Paths {
     public static final String MENTORSHIP = API_V1 + "/mentorships";
     public static final String SUBSCRIPTION = API_V1 + "/subscriptions";
     public static final String EVENT = API_V1 + "/events";
+    public static final String EVENT_PARTICIPATION = API_V1 + EVENT + "/participation";
 }

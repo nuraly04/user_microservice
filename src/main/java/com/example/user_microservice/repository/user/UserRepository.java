@@ -25,6 +25,18 @@ public interface UserRepository extends JpaRepository<User, Long>, QuerydslPredi
         """)
     List<User> findMentorsByMenteeId(Long menteeId);
 
+    @Query(nativeQuery = true, value = """
+        SELECT (*) FROM users
+        WHERE id in (SELECT user_id FROM m2m_user_event WHERE event_id = :eventId)
+        """)
+    List<User> findMemberByEventId(Long eventId);
+
+    @Query(nativeQuery = true, value = """
+        SELECT count(*) FROM users
+        WHERE id in (SELECT user_id FROM m2m_user_event WHERE event_id = :eventId)
+        """)
+    Long countMemberByEventId(Long eventId);
+
     Long countByAuthors(User author);
 
     Long countByFollowers(User follower);

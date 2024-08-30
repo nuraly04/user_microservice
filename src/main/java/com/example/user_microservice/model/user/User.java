@@ -2,6 +2,7 @@ package com.example.user_microservice.model.user;
 
 import com.example.user_microservice.model.base.BaseEntity;
 import com.example.user_microservice.model.contact.Contact;
+import com.example.user_microservice.model.event.Event;
 import com.example.user_microservice.model.reference.RefCommonReference;
 import com.example.user_microservice.model.skill.Skill;
 import jakarta.persistence.CascadeType;
@@ -62,6 +63,12 @@ public class User extends BaseEntity {
     joinColumns = @JoinColumn(name = "author_id"),
     inverseJoinColumns = @JoinColumn(name = "follower_id"))
     private List<User> followers;
+
+    @ManyToMany
+    @JoinTable(name = "m2m_user_event",
+    joinColumns = @JoinColumn(name = "user_id"),
+    inverseJoinColumns = @JoinColumn(name = "event_id"))
+    private List<Event> events;
 
     @OneToMany(mappedBy = "user")
     private List<Contact> contacts;

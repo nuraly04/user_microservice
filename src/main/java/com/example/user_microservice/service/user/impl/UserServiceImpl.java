@@ -121,6 +121,18 @@ public class UserServiceImpl implements UserService {
         return userRepository.findMentorsByMenteeId(menteeId);
     }
 
+    @Override
+    @Transactional
+    public List<User> findMemberByEventId(Long eventId) {
+        return userRepository.findMemberByEventId(eventId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Long countMembersByEventId(Long eventId) {
+        return userRepository.countMemberByEventId(eventId);
+    }
+
     private void search(BooleanBuilder predicate, UserFilterDto filterDto) {
         if (nonNull(filterDto.getId())) {
             predicate.and(user.id.eq(filterDto.getId()));

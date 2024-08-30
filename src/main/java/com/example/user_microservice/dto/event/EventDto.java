@@ -36,7 +36,7 @@ public class EventDto {
     @NotBlank
     private String location;
 
-    private Integer maxAttendees;
+    private Long maxAttendees;
 
     @NotEmpty
     private List<Long> skills;

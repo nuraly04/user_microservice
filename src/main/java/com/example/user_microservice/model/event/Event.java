@@ -40,6 +40,9 @@ public class Event extends BaseEntity {
     @Column(name = "max_attendees")
     private Long maxAttendees;
 
+    @ManyToMany(mappedBy = "events"                               )
+    private List<User> users;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 

@@ -3,6 +3,7 @@ package com.example.user_microservice.service.event.impl;
 import com.example.user_microservice.dto.event.EventFilterDto;
 import com.example.user_microservice.exception.DataNotFoundException;
 import com.example.user_microservice.model.event.Event;
+import com.example.user_microservice.model.user.User;
 import com.example.user_microservice.repository.event.EventRepository;
 import com.example.user_microservice.service.event.EventService;
 import com.querydsl.core.BooleanBuilder;
@@ -36,8 +37,20 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @Transactional
-    public Event createEvent(Event event) {
+    public Event saveOrUpdate(Event event) {
         return eventRepository.save(event);
+    }
+
+    @Override
+    @Transactional
+    public List<Event> findByOwner(User owner) {
+        return eventRepository.findAllByOwner(owner);
+    }
+
+    @Override
+    @Transactional
+    public List<Event> findByMember(User member) {
+        return eventRepository.findAllByUsers(member);
     }
 
     @Override

@@ -154,3 +154,10 @@ CREATE TABLE IF NOT EXISTS m2m_subscription
     CONSTRAINT fk_follower_id FOREIGN KEY (follower_id) REFERENCES users (id),
     CONSTRAINT fk_author_id FOREIGN KEY (author_id) REFERENCES users (id)
 );
+
+CREATE TABLE IF NOT EXISTS m2m_user_event
+(
+    id BIGSERIAL PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    event_id BIGINT NOT NULL
+);

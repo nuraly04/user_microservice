@@ -35,4 +35,8 @@ public interface UserService {
     List<User> findUsersByIds(List<Long> userIds);
 
     List<User> findMentorsByMenteeId(Long menteeId);
+
+    List<User> findMemberByEventId(Long eventId);
+
+    Long countMembersByEventId(Long eventId);
 }

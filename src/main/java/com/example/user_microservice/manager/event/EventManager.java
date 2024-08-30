@@ -9,9 +9,15 @@ public interface EventManager {
 
     void deleteEvent(Long eventId);
 
+    EventDto updateEvent(Long eventId, EventDto eventDto);
+
     EventDto createEvent(Long ownerId, EventDto eventDto);
 
     EventDto getEvent(Long eventId);
 
     List<EventDto> getEvents(EventFilterDto filterDto);
+
+    List<EventDto> getOwnerEvents(Long ownerId);
+
+    List<EventDto> getMemberEvents(Long memberId);
 }
