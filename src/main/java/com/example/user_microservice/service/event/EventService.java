@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface EventService {
 
-    void deleteEvent(Event event);
+    void deleteEvent(User deletedBy, Event event);
     Event get(Long eventId);
 
     Event saveOrUpdate(Event event);

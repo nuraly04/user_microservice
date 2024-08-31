@@ -1,6 +1,7 @@
 package com.example.user_microservice.model.skill;
 
 import com.example.user_microservice.model.base.BaseEntity;
+import com.example.user_microservice.model.goal.Goal;
 import com.example.user_microservice.model.user.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -28,6 +29,9 @@ public class Skill extends BaseEntity {
                 joinColumns = @JoinColumn(name = "skill_id"),
                 inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> users;
+
+    @ManyToMany(mappedBy = "skills")
+    private List<Goal> goals;
 
     @Column(name = "created_at")
     LocalDateTime createdAt;

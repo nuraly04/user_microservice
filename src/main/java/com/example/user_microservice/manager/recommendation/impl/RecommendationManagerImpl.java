@@ -95,7 +95,8 @@ public class RecommendationManagerImpl implements RecommendationManager {
 
     @Override
     @Transactional
-    public void deleteRecommendation(Long recommendationId) {
+    public void deleteRecommendation(Long userId, Long recommendationId) {
+        User deletedBy = userService.get(userId);
         Recommendation recommendation = recommendationService.get(recommendationId);
         List<SkillOffer> skillOffers = skillOfferService.findByRecommendation(recommendation);
         List<Skill> skills = skillOffers.stream()
@@ -104,6 +105,6 @@ public class RecommendationManagerImpl implements RecommendationManager {
         skillOffers.forEach(skillOfferService::delete);
         List<UserSkillGuarantee> skillGuarantees = guaranteeService.findBySkillsAndGuarantorAndUser(recommendation.getReceiver(), recommendation.getAuthor(), skills);
         skillGuarantees.forEach(guaranteeService::delete);
-        recommendationService.delete(recommendation);
+        recommendationService.delete(deletedBy, recommendation);
     }
 }

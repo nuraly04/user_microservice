@@ -65,8 +65,10 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @Transactional
-    public void deleteEvent(Event event) {
-        eventRepository.delete(event);
+    public void deleteEvent(User deletedBy, Event event) {
+        event.setDeletedAt(LocalDateTime.now());
+        event.setDeletedBy(deletedBy);
+        eventRepository.save(event);
     }
 
     private void search(BooleanBuilder predicate, EventFilterDto filterDto) {

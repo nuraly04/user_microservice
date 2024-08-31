@@ -81,9 +81,10 @@ public class EventManagerImpl implements EventManager {
 
     @Override
     @Transactional
-    public void deleteEvent(Long eventId) {
+    public void deleteEvent(Long userId, Long eventId) {
+        User deletedBy = userService.get(userId);
         Event event = eventService.get(eventId);
-        eventService.deleteEvent(event);
+        eventService.deleteEvent(deletedBy, event);
     }
 
     @Override

@@ -48,8 +48,10 @@ public class RecommendationServiceImpl implements RecommendationService {
     }
     @Override
     @Transactional
-    public void delete(Recommendation recommendation) {
-        recommendationRepository.delete(recommendation);
+    public void delete(User deletedBy, Recommendation recommendation) {
+        recommendation.setDeletedAt(LocalDateTime.now());
+        recommendation.setDeletedBy(deletedBy);
+        recommendationRepository.save(recommendation);
     }
 
     @Override

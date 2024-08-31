@@ -16,5 +16,5 @@ public interface RecommendationManager {
 
     void updateRecommendation(Long recommendationId, RecommendationDto recommendationDto);
 
-    void deleteRecommendation(Long recommendationId);
+    void deleteRecommendation(Long userId, Long recommendationId);
 }

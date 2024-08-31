@@ -1,6 +1,6 @@
 package com.example.user_microservice.model.recommendation;
 
-import com.example.user_microservice.model.base.BaseEntity;
+import com.example.user_microservice.model.base.DeletedEntity;
 import com.example.user_microservice.model.skill.SkillOffer;
 import com.example.user_microservice.model.user.User;
 import jakarta.persistence.Column;
@@ -19,7 +19,7 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "recommendation")
-public class Recommendation extends BaseEntity {
+public class Recommendation extends DeletedEntity {
 
     @OneToOne
     @JoinColumn(name = "author_id")

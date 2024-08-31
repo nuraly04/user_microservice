@@ -3,6 +3,8 @@ package com.example.user_microservice.model.user;
 import com.example.user_microservice.model.base.BaseEntity;
 import com.example.user_microservice.model.contact.Contact;
 import com.example.user_microservice.model.event.Event;
+import com.example.user_microservice.model.goal.Goal;
+import com.example.user_microservice.model.goal.GoalInvitation;
 import com.example.user_microservice.model.reference.RefCommonReference;
 import com.example.user_microservice.model.skill.Skill;
 import jakarta.persistence.CascadeType;
@@ -69,6 +71,15 @@ public class User extends BaseEntity {
     joinColumns = @JoinColumn(name = "user_id"),
     inverseJoinColumns = @JoinColumn(name = "event_id"))
     private List<Event> events;
+
+    @OneToMany(mappedBy = "mentor")
+    private List<Goal> goals;
+
+    @OneToMany(mappedBy = "inviter")
+    private List<GoalInvitation> sentToInvitations;
+
+    @OneToMany(mappedBy = "invited")
+    private List<GoalInvitation> invitations;
 
     @OneToMany(mappedBy = "user")
     private List<Contact> contacts;

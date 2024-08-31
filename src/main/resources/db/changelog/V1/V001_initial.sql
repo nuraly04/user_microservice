@@ -35,6 +35,37 @@ CREATE TABLE IF NOT EXISTS users
     CONSTRAINT fk_city FOREIGN KEY (city) REFERENCES ref_common_reference (id)
 );
 
+CREATE TABLE IF NOT EXISTS goal
+(
+    id          BIGSERIAL PRIMARY KEY,
+    title       VARCHAR(255) NOT NULL,
+    description TEXT         NOT NULL,
+    status      VARCHAR(64)  NOT NULL,
+    parent_id   BIGINT,
+    mentor_id   BIGINT       NOT NULL,
+    created_at  TIMESTAMP DEFAULT now(),
+    updated_at  TIMESTAMP DEFAULT now(),
+    deleted_at  TIMESTAMP,
+    deleted_by  BIGINT,
+
+    CONSTRAINT fk_parent_id FOREIGN KEY (parent_id) REFERENCES goal (id),
+    CONSTRAINT fk_mentor_id FOREIGN KEY (mentor_id) REFERENCES users (id),
+    CONSTRAINT fk_deleted_by FOREIGN KEY (deleted_by) REFERENCES users (id)
+);
+
+CREATE TABLE IF NOT EXISTS goal_invitation
+(
+    id         BIGSERIAL PRIMARY KEY,
+    inviter_id BIGINT      NOT NULL,
+    invited_id BIGINT      NOT NULL,
+    goal_id    BIGINT      NOT NULL,
+    status     VARCHAR(64) NOT NULL,
+
+    CONSTRAINT fk_inviter_id FOREIGN KEY (inviter_id) REFERENCES users (id),
+    CONSTRAINT fk_invited_id FOREIGN KEY (invited_id) REFERENCES users (id),
+    CONSTRAINT fk_goal_id FOREIGN KEY (goal_id) REFERENCES goal (id)
+);
+
 CREATE TABLE IF NOT EXISTS skill
 (
     id         BIGSERIAL PRIMARY KEY,
@@ -51,9 +82,12 @@ CREATE TABLE IF NOT EXISTS recommendation
     content     TEXT,
     created_at  TIMESTAMP DEFAULT now(),
     updated_at  TIMESTAMP DEFAULT now(),
+    deleted_at  TIMESTAMP,
+    deleted_by  BIGINT,
 
     CONSTRAINT fk_author_id FOREIGN KEY (author_id) REFERENCES users (id),
-    CONSTRAINT fk_receiver_id FOREIGN KEY (receiver_id) REFERENCES users (id)
+    CONSTRAINT fk_receiver_id FOREIGN KEY (receiver_id) REFERENCES users (id),
+    CONSTRAINT fk_deleted_by FOREIGN KEY (deleted_by) REFERENCES users (id)
 );
 
 CREATE TABLE IF NOT EXISTS user_skill_guarantee
@@ -105,22 +139,25 @@ CREATE TABLE IF NOT EXISTS event
     id            BIGSERIAL PRIMARY KEY,
     created_at    TIMESTAMP DEFAULT now(),
     updated_at    TIMESTAMP DEFAULT now(),
-    start_date    TIMESTAMP NOT NULL,
-    end_date      TIMESTAMP NOT NULL,
+    start_date    TIMESTAMP    NOT NULL,
+    end_date      TIMESTAMP    NOT NULL,
     content       TEXT         NOT NULL,
     title         VARCHAR(128) NOT NULL,
     owner_id      BIGINT       NOT NULL,
     city_id       BIGINT       NOT NULL,
     location      VARCHAR(255) NOT NULL,
     max_attendees BIGINT,
+    deleted_at    TIMESTAMP,
+    deleted_by    BIGINT,
 
     CONSTRAINT fk_owner_id FOREIGN KEY (owner_id) REFERENCES users (id),
-    CONSTRAINT fk_city_id FOREIGN KEY (city_id) REFERENCES ref_common_reference (id)
+    CONSTRAINT fk_city_id FOREIGN KEY (city_id) REFERENCES ref_common_reference (id),
+    CONSTRAINT fk_deleted_by FOREIGN KEY (deleted_by) REFERENCES users (id)
 );
 
 CREATE TABLE IF NOT EXISTS event_skill
 (
-    id BIGSERIAL PRIMARY KEY,
+    id       BIGSERIAL PRIMARY KEY,
     skill_id BIGINT NOT NULL,
     event_id BIGINT NOT NULL
 );
@@ -157,7 +194,20 @@ CREATE TABLE IF NOT EXISTS m2m_subscription
 
 CREATE TABLE IF NOT EXISTS m2m_user_event
 (
-    id BIGSERIAL PRIMARY KEY,
-    user_id BIGINT NOT NULL,
-    event_id BIGINT NOT NULL
+    id       BIGSERIAL PRIMARY KEY,
+    user_id  BIGINT NOT NULL,
+    event_id BIGINT NOT NULL,
+
+    CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users (id),
+    CONSTRAINT fk_event_id FOREIGN KEY (event_id) REFERENCES event (id)
+);
+
+CREATE TABLE IF NOT EXISTS m2m_goal_skill
+(
+    id       BIGSERIAL PRIMARY KEY,
+    skill_id BIGINT NOT NULL,
+    goal_id  BIGINT NOT NULL,
+
+    CONSTRAINT fk_skill_id FOREIGN KEY (skill_id) REFERENCES skill (id),
+    CONSTRAINT fk_goal_id FOREIGN KEY (goal_id) REFERENCES goal (id)
 );

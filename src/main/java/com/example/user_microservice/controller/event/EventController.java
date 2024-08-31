@@ -3,13 +3,11 @@ package com.example.user_microservice.controller.event;
 import com.example.user_microservice.dto.event.EventDto;
 import com.example.user_microservice.dto.event.EventFilterDto;
 import com.example.user_microservice.manager.event.EventManager;
-import com.example.user_microservice.model.event.Event;
 import com.example.user_microservice.utils.Paths;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -47,9 +45,12 @@ public class EventController {
         return eventManager.getEvents(filterDto);
     }
 
-    @DeleteMapping("{eventId}")
-    public void deleteEvent(@PathVariable("eventId") Long eventId) {
-        eventManager.deleteEvent(eventId);
+    @PutMapping("/delete/{eventId}")
+    public void deleteEvent(
+            @RequestParam Long userId,
+            @PathVariable("eventId") Long eventId
+    ) {
+        eventManager.deleteEvent(userId, eventId);
     }
 
     @PutMapping("/{eventId}")

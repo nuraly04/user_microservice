@@ -14,7 +14,7 @@ public interface RecommendationService {
     List<Recommendation> findByReceiver(User receiver);
 
     List<Recommendation> findByAuthor(User author);
-    void delete(Recommendation recommendationId);
+    void delete(User deletedBy, Recommendation recommendationId);
     Recommendation update(Recommendation recommendation, RecommendationDto recommendationDto);
     Recommendation findByAuthorAndReceiver(User author, User receiver);
 }

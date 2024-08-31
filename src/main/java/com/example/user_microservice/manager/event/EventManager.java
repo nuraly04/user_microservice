@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface EventManager {
 
-    void deleteEvent(Long eventId);
+    void deleteEvent(Long userId, Long eventId);
 
     EventDto updateEvent(Long eventId, EventDto eventDto);
 
