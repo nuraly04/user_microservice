@@ -15,5 +15,7 @@ public interface GoalInvitationMapper {
     @Mapping(target = "status", ignore = true)
     GoalInvitation toCreate(User inviter, User invited, Goal goal);
 
+    @Mapping(target = "inviter.city", source = "inviter.city.name")
+    @Mapping(target = "invited.city", source = "invited.city.name")
     GoalInvitationDto toDto(GoalInvitation invitation);
 }

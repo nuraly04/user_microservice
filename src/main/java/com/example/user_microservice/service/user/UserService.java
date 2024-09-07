@@ -1,6 +1,8 @@
 package com.example.user_microservice.service.user;
 
 import com.example.user_microservice.dto.user.UserFilterDto;
+import com.example.user_microservice.model.contact.Contact;
+import com.example.user_microservice.model.reference.RefCommonReference;
 import com.example.user_microservice.model.user.User;
 
 import java.util.List;
@@ -22,6 +24,8 @@ public interface UserService {
 
     boolean existsByFollowerAndAuthor(User follower, User author);
 
+    boolean existsByEmail(String email);
+
     Long countFollowers(User author);
 
     Long countAuthors(User follower);
@@ -31,6 +35,8 @@ public interface UserService {
     List<User> getFollowersByAuthor(User author, UserFilterDto filterDto);
 
     List<User> getAuthorsByFollower(User follower, UserFilterDto filterDto);
+
+    List<User> getUsers(UserFilterDto filterDto);
 
     List<User> findUsersByIds(List<Long> userIds);
 

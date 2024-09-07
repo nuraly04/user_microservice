@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Builder
@@ -30,7 +31,9 @@ public class UserCreateRequest {
     @Email
     private String email;
 
-    private Long phone;
+    private String phone;
 
     private Long cityId;
+
+    private List<ContactDto> contacts;
 }

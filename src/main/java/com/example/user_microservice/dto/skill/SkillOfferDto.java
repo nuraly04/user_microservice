@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SkillOfferDto {
 
-    private Long skillId;
+    private Long id;
+    private SkillDto skill;
     private Long recommendationId;
 }

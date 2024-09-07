@@ -16,14 +16,14 @@ import lombok.Setter;
 public class UserSkillGuarantee extends BaseEntity {
 
     @ManyToOne
-    @JoinColumn(name = "skill_id")
+    @JoinColumn(name = "skill_id", nullable = false)
     private Skill skill;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "guarantor_id")
+    @JoinColumn(name = "guarantor_id", nullable = false)
     private User guarantor;
 }

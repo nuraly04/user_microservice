@@ -1,5 +1,6 @@
 package com.example.user_microservice.controller.recommendation;
 
+import com.example.user_microservice.dto.recommendation.CreateRecommendationRequestDto;
 import com.example.user_microservice.dto.recommendation.RecommendationDto;
 import com.example.user_microservice.manager.recommendation.RecommendationManager;
 import com.example.user_microservice.utils.Paths;
@@ -26,7 +27,7 @@ public class RecommendationController {
 
     RecommendationManager recommendationManager;
 
-    @GetMapping("/{receiverId}")
+    @GetMapping("/received/{receiverId}")
     public List<RecommendationDto> getRecommendations(@PathVariable("receiverId") Long receiverId) {
         return recommendationManager.getRecommendations(receiverId);
     }
@@ -36,14 +37,14 @@ public class RecommendationController {
         return recommendationManager.getRecommendation(recommendationId);
     }
 
-    @GetMapping("/{authorId}")
+    @GetMapping("/given/{authorId}")
     public List<RecommendationDto> getAllGivenRecommendation(@PathVariable("authorId") Long authorId) {
         return recommendationManager.getAllGivenRecommendation(authorId);
     }
 
     @PostMapping()
-    public void giveRecommendation(@RequestBody @Valid RecommendationDto recommendation) {
-        recommendationManager.giveRecommendation(recommendation);
+    public RecommendationDto giveRecommendation(@RequestBody @Valid CreateRecommendationRequestDto recommendation) {
+        return recommendationManager.giveRecommendation(recommendation);
     }
 
     @PutMapping("/{recommendationId}")

@@ -3,13 +3,14 @@ package com.example.user_microservice.repository.skill;
 import com.example.user_microservice.model.skill.Skill;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface SkillRepository extends JpaRepository<Skill, Long> {
+public interface SkillRepository extends JpaRepository<Skill, Long>, QuerydslPredicateExecutor<Skill> {
 
     @Query(nativeQuery = true, value = """
             SELECT so.* FROM skill so
@@ -27,9 +28,10 @@ public interface SkillRepository extends JpaRepository<Skill, Long> {
     List<Skill> findAllOfferedByUserId(@Param("userId") Long userId);
 
     @Query(nativeQuery = true, value = """
-            SELECT FROM m2m_user_skill
-            WHERE skill_id = :skillId
-            AND user_id = :userId
+            SELECT FROM skill s 
+            JOIN m2m_user_skill us ON s.id = us.skill_id
+            WHERE us.skill_id = :skillId
+            AND us.user_id = :userId
             """)
     Skill findBySkillIdAndByUserId(Long skillId, Long userId);
 

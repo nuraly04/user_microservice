@@ -2,6 +2,8 @@ package com.example.user_microservice.service.user.impl;
 
 import com.example.user_microservice.dto.user.UserFilterDto;
 import com.example.user_microservice.exception.DataNotFoundException;
+import com.example.user_microservice.model.contact.Contact;
+import com.example.user_microservice.model.reference.RefCommonReference;
 import com.example.user_microservice.model.user.User;
 import com.example.user_microservice.repository.user.UserRepository;
 import com.example.user_microservice.service.user.UserService;
@@ -12,7 +14,6 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,7 +36,9 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public User get(Long userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new DataNotFoundException(User.class, userId, "id"));
+        return userRepository.findById(userId).orElseThrow(
+                () -> new DataNotFoundException(User.class, userId, "id")
+        );
     }
 
     @Override
@@ -69,6 +72,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    @Override
     @Transactional
     public Long countFollowers(User author) {
         return userRepository.countByAuthors(author);
@@ -80,7 +89,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.countByFollowers(follower);
     }
 
-
     @Override
     @Transactional(readOnly = true)
     public List<User> findMenteesByMentorId(Long mentorId) {
@@ -91,22 +99,26 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public List<User> getFollowersByAuthor(User author, UserFilterDto filterDto) {
         BooleanBuilder predicate = new BooleanBuilder();
-        List<User> users = new ArrayList<>();
         predicate.and(user.authors.contains(author));
         search(predicate, filterDto);
-        userRepository.findAll(predicate).forEach(users::add);
-        return users;
+        return (List<User>) userRepository.findAll(predicate);
     }
 
     @Override
     @Transactional
     public List<User> getAuthorsByFollower(User follower, UserFilterDto filterDto) {
         BooleanBuilder predicate = new BooleanBuilder();
-        List<User> users = new ArrayList<>();
         predicate.and(user.followers.contains(follower));
         search(predicate, filterDto);
-        userRepository.findAll(predicate).forEach(users::add);
-        return users;
+        return (List<User>) userRepository.findAll(predicate);
+    }
+
+    @Override
+    @Transactional
+    public List<User> getUsers(UserFilterDto filterDto) {
+        BooleanBuilder predicate = new BooleanBuilder();
+        search(predicate, filterDto);
+        return (List<User>) userRepository.findAll(predicate);
     }
 
     @Override

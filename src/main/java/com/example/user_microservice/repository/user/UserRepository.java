@@ -42,4 +42,6 @@ public interface UserRepository extends JpaRepository<User, Long>, QuerydslPredi
     Long countByFollowers(User follower);
 
     boolean existsByAuthorsIdEqualsAndFollowersIdEquals(Long followerId, Long authorId);
+
+    boolean existsByEmail(String email);
 }

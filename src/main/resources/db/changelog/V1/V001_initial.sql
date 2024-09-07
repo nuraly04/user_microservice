@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS users
     date_of_birth DATE         NOT NULL,
     city          BIGINT,
     email         VARCHAR(128) NOT NULL UNIQUE,
-    phone         VARCHAR(64) UNIQUE,
+    phone         VARCHAR(64),
     active        BOOLEAN      NOT NULL DEFAULT true,
     created_at    TIMESTAMP             DEFAULT now(),
     updated_at    TIMESTAMP             DEFAULT now(),
@@ -93,14 +93,16 @@ CREATE TABLE IF NOT EXISTS recommendation
 CREATE TABLE IF NOT EXISTS user_skill_guarantee
 (
     id           BIGSERIAL PRIMARY KEY,
+    user_id      BIGINT NOT NULL,
     skill_id     BIGINT NOT NULL,
     guarantor_id BIGINT NOT NULL,
 
+    CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users (id),
     CONSTRAINT fk_skill_id FOREIGN KEY (skill_id) REFERENCES skill (id),
     CONSTRAINT fk_guarantee_id FOREIGN KEY (guarantor_id) REFERENCES users (id)
 );
 
-CREATE TABLE IF NOT EXISTS offer_skill
+CREATE TABLE IF NOT EXISTS skill_offer
 (
     id                BIGSERIAL PRIMARY KEY,
     skill_id          BIGINT NOT NULL,

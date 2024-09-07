@@ -1,12 +1,13 @@
 package com.example.user_microservice.manager.recommendation;
 
+import com.example.user_microservice.dto.recommendation.CreateRecommendationRequestDto;
 import com.example.user_microservice.dto.recommendation.RecommendationDto;
 
 import java.util.List;
 
 public interface RecommendationManager {
 
-    void giveRecommendation(RecommendationDto recommendation);
+    RecommendationDto giveRecommendation(CreateRecommendationRequestDto recommendation);
 
     RecommendationDto getRecommendation(Long recommendationId);
 

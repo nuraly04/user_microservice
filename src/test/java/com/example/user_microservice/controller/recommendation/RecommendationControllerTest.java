@@ -84,9 +84,10 @@ public class RecommendationControllerTest {
     @Test
     public void deleteRecommendationTest() {
         Long recommendationId = 1L;
+        Long userId = 1L;
 
-        recommendationController.deleteRecommendation(recommendationId);
+        recommendationController.deleteRecommendation(userId, recommendationId);
 
-        verify(recommendationManager, Mockito.times(1)).deleteRecommendation(recommendationId);
+        verify(recommendationManager, Mockito.times(1)).deleteRecommendation(userId, recommendationId);
     }
 }

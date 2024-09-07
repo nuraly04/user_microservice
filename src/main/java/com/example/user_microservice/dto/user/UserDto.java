@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -19,5 +21,12 @@ public class UserDto {
 
     @NotBlank
     private String surname;
+
+    @NotBlank
+    private String email;
+    private String phone;
+    private String city;
     private String patronymic;
+
+    private List<ContactDto> contacts;
 }

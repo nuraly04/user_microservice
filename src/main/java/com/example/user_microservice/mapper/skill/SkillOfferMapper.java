@@ -1,5 +1,6 @@
 package com.example.user_microservice.mapper.skill;
 
+import com.example.user_microservice.dto.skill.SkillOfferDto;
 import com.example.user_microservice.model.recommendation.Recommendation;
 import com.example.user_microservice.model.skill.Skill;
 import com.example.user_microservice.model.skill.SkillOffer;
@@ -14,4 +15,9 @@ public interface SkillOfferMapper {
     @Mapping(source = "skill", target = "skill")
     @Mapping(source = "recommendation", target = "recommendation")
     SkillOffer toCreate(Skill skill, Recommendation recommendation);
+
+    @Mapping(source = "skill.id", target = "skill.id")
+    @Mapping(source = "skill.name", target = "skill.title")
+    @Mapping(source = "recommendation.id", target = "recommendationId")
+    SkillOfferDto toDto(SkillOffer skillOffer);
 }

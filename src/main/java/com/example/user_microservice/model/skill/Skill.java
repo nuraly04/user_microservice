@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -32,6 +33,9 @@ public class Skill extends BaseEntity {
 
     @ManyToMany(mappedBy = "skills")
     private List<Goal> goals;
+
+    @OneToMany(mappedBy = "skill")
+    private List<SkillOffer> skillOffers;
 
     @Column(name = "created_at")
     LocalDateTime createdAt;

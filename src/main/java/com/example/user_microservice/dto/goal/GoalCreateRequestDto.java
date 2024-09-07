@@ -1,6 +1,5 @@
 package com.example.user_microservice.dto.goal;
 
-import com.example.user_microservice.model.goal.Goal;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;

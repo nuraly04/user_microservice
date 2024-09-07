@@ -10,6 +10,7 @@ import com.example.user_microservice.model.goal.Goal;
 import com.example.user_microservice.model.skill.Skill;
 import com.example.user_microservice.model.user.User;
 import com.example.user_microservice.service.goal.GoalService;
+import com.example.user_microservice.service.reference.RefCommonReferenceService;
 import com.example.user_microservice.service.skill.SkillService;
 import com.example.user_microservice.service.user.UserService;
 import com.example.user_microservice.validation.goal.GoalValidation;
@@ -28,6 +29,7 @@ public class GoalManagerImpl implements GoalManager {
 
     SkillService skillService;
     GoalService goalService;
+    RefCommonReferenceService referenceService;
     GoalMapper goalMapper;
     UserService userService;
     GoalValidation goalValidation;
@@ -39,7 +41,7 @@ public class GoalManagerImpl implements GoalManager {
         List<Skill> skills = skillService.findBySkillIds(requestDto.getSkillIds());
         goalValidation.checkCountActiveGoalByMentor(mentor);
         goalValidation.checkAvailableSkills(skills.size(), requestDto.getSkillIds().size());
-        Goal goal = goalMapper.toCreate(requestDto);
+        Goal goal = goalMapper.toCreate(requestDto, mentor);
         goal.setSkills(skills);
         goalService.saveOrUpdate(goal);
         return goalMapper.toDto(goal);
