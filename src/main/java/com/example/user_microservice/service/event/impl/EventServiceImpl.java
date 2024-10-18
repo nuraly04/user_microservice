@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.user_microservice.model.event.QEvent.event;
@@ -58,9 +57,7 @@ public class EventServiceImpl implements EventService {
     public List<Event> getEvents(EventFilterDto filterDto) {
         BooleanBuilder predicate = new BooleanBuilder();
         search(predicate, filterDto);
-        List<Event> events = new ArrayList<>();
-        eventRepository.findAll(predicate).forEach(events::add);
-        return events;
+        return (List<Event>) eventRepository.findAll(predicate);
     }
 
     @Override

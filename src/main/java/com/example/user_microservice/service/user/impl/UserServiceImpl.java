@@ -61,8 +61,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void deleteMentorshipUsers(List<User> users, User user) {
-        user.getMentees().removeAll(users);
+    public void deleteMentorshipUsers(List<User> mentees, User user) {
+        user.getMentees().removeAll(mentees);
     }
 
     @Override
