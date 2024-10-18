@@ -7,6 +7,7 @@ import com.example.user_microservice.dto.user.RemoveUsers;
 import com.example.user_microservice.dto.user.UserDto;
 import com.example.user_microservice.manager.mentorship.MentorshipManager;
 import com.example.user_microservice.utils.Paths;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,7 @@ public class MentorshipController {
     MentorshipManager mentorshipManager;
 
     @PostMapping("/{menteeId}")
+    @Operation(description = "API FOR MENTEE")
     public void requestMentorship(
             @PathVariable("menteeId") Long menteeId,
             @RequestBody @Valid MentorshipRequestAddDto requestDto
